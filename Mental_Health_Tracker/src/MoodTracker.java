@@ -1,4 +1,4 @@
-import java.util.*;  // For HashMap, Scanner, Random
+import java.util.*; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +9,6 @@ public class MoodTracker extends Tracker {
     private static final Scanner scanner = new Scanner(System.in);
 
     static {
-        // Initialize mood tips
         moodTips.put("Happy", new String[]{
             "Keep doing what makes you happy!",
             "Share your happiness with someone else.",
@@ -82,7 +81,7 @@ public class MoodTracker extends Tracker {
     }
 
     public MoodTracker() {
-        super("moods.txt");  // Initialize file for logging mood history
+        super("moods.txt"); 
     }
 
     @Override
@@ -95,20 +94,16 @@ public class MoodTracker extends Tracker {
             return;
         }
 
-        // Use java.util.Date to get the current date
         java.util.Date utilDate = new java.util.Date();  
-        // Convert java.util.Date to java.sql.Date for MySQL
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 
-        // Use the logMood method to insert mood log into the database
-        boolean logged = Database.logMood(username, mood, sqlDate);  // Log mood to MySQL
+        boolean logged = Database.logMood(username, mood, sqlDate); 
         if (logged) {
             System.out.println("Mood logged successfully.");
         } else {
             System.out.println("Failed to log mood.");
         }
 
-        // Provide a random tip for the logged mood
         String[] tips = moodTips.get(mood);
         String randomTip = tips[new Random().nextInt(tips.length)];
         System.out.println("Here's a tip for when you're feeling " + mood + ": " + randomTip);
@@ -142,28 +137,25 @@ public class MoodTracker extends Tracker {
     @Override
     public void generateReport(String username) {
         Map<String, Integer> moodCounts = new HashMap<>();
-        AtomicInteger total = new AtomicInteger(0);  // Using AtomicInteger for total
+        AtomicInteger total = new AtomicInteger(0);
         
-        // Query to fetch mood counts for the user from the database
         String query = "SELECT mood, COUNT(*) AS count FROM MoodLogs WHERE username = ? GROUP BY mood";
     
         try (PreparedStatement stmt = Database.getConnection().prepareStatement(query)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
     
-            // Populate the moodCounts map and calculate the total
             while (rs.next()) {
                 String mood = rs.getString("mood");
                 int count = rs.getInt("count");
                 moodCounts.put(mood, count);
-                total.addAndGet(count);  // Update total using AtomicInteger
+                total.addAndGet(count); 
             }
     
-            // Generate the report
             if (total.get() > 0) {
                 System.out.println("\nMood Report for " + username + ":");
                 moodCounts.forEach((mood, count) -> {
-                    System.out.printf("%s: %.2f%%\n", mood, (count * 100.0) / total.get());  // Access total using get()
+                    System.out.printf("%s: %.2f%%\n", mood, (count * 100.0) / total.get()); 
                 });
             } else {
                 System.out.println("No data available to generate a report.");
@@ -173,9 +165,6 @@ public class MoodTracker extends Tracker {
         }
     }
     
-    
-
-    // Helper method to capitalize the first letter of the mood
     private String capitalizeMood(String mood) {
         if (mood == null || mood.isEmpty()) return mood;
         return mood.substring(0, 1).toUpperCase() + mood.substring(1).toLowerCase();
