@@ -4,7 +4,7 @@ public class MentalHealthTracker {
     private final MoodTracker moodTracker;
 
     public MentalHealthTracker() {
-        this.moodTracker = new MoodTracker(); // Initialize MoodTracker
+        this.moodTracker = new MoodTracker();
     }
 
     public void start() {
@@ -18,7 +18,7 @@ public class MentalHealthTracker {
             System.out.println("3. Exit");
             System.out.print("Select an option (1-3): ");
             int option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> register(scanner);
@@ -40,7 +40,7 @@ public class MentalHealthTracker {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        boolean success = Database.registerUser(username, password);  // Corrected here
+        boolean success = Database.registerUser(username, password);
         if (success) {
             System.out.println("Registration successful! You can now log in.");
         } else {
@@ -54,7 +54,7 @@ public class MentalHealthTracker {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        boolean success = Database.loginUser(username, password);  // Corrected here
+        boolean success = Database.loginUser(username, password); 
         if (success) {
             System.out.println("Login successful! Welcome back, " + username + "!");
             moodTracking(scanner, username);
@@ -74,7 +74,7 @@ public class MentalHealthTracker {
 
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (choice) {
                 case 1 -> moodTracker.logEntry(username);
